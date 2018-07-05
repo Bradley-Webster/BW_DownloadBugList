@@ -1,0 +1,64 @@
+.data {
+  color: #363;
+  padding-left: 6px;
+}
+
+.element {
+  color: #363;
+  padding-left: 6px;
+}
+
+footer {
+  font-size: 10px;
+  padding-top: 20px;
+}
+
+.bold{
+font-weight:bold;}
+
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+textarea {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+	font-size: 12px;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.txtarea{
+    max-width:100%;
+    min-height:200px;
+    display:block;
+    width:100%;
+}
+
+.testBugSheet{
+    padding:10px;
+}
+
+.testBugButton{
+    padding:5px;
+    background-color:#dddddd;
+    color:#363;
+    font-family:arial;
+    font-size:13px;
+    border:2px solid #dddddd;
+}
+
+.testBugButton:hover{
+    background-color:#EFEFEF;
+    border:2px solid #EFEFEF;
+}
