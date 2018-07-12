@@ -1,55 +1,148 @@
-$(function() {
-  var client = ZAFClient.init();
-  client.invoke('resize', { width: '100%', height: '120px' });
-  showInfo();
-
+$(function()
+{
+  let client = ZAFClient.init();
+  client.invoke('resize', { width: '100%', height: '400px' });
+  client.get('ticket.requester.id').then(
+	function(data)
+	{
+		let user_id = data['ticket.requester.id'];
+        console.log('Requester id is ' + JSON.stringify(user_id));
+        requestUserInfo(client, user_id);
+	}
+  );
 });
+function test(){
+    var client = ZAFClient.init();
 
-function showInfo() {
-  var requester_data = {
-    'Bug_ID': 'Jane Doe',
-    'State': ['tag1', 'tag2'],
-    'Target_Release': 'November 20, 2014',
-    'TITLE': 'June 27, 2016'
+
+}
+function showInfo(data)
+{
+  let requester_data =
+  {
+    'name': data.user.name,
+    'tags': data.user.details,
+    'created_at': formatDate(data.user.created_at),
+    'last_login_at': formatDate(data.user.last_login_at)
+
   };
-
-  var source = $("#requester-template").html();
-  var template = Handlebars.compile(source);
-  var html = template(requester_data);
+  let source = $("#requester-template").html();
+  let template = Handlebars.compile(source);
+  let html = template(requester_data);
   $("#content").html(html);
 }
 
-$(document).ready(function(){
-    $('button').click(function(){
-        var data = $('#txt').val();
-        if(data == '')
-            return;
 
-        JSONToCSVConvertor(data, "Test Bug Sheet", true);
-    });
-});
-
-function getSectionsRecursive(client, page, sections, categoryID)
-{
-    var getSections = {
-        url : “/api/v2/help_center/en-us/sections.json?per_page=100&page=” + page.toString(),
-        type: ‘GET’,
-    };
-
-    return client.request(getSections).then(function(data) {
-        var newSections = data['sections'];
-        sections = sections.concat(newSections);
-        if (!data["next_page"]) {
-            return sections;
-        } else {
-            return getSectionsRecursive(client, page + 1, sections, categoryID);
-        }
-    })
-    .catch(function() {
-      alert("Failed to get Bug Tracker sections from Zendesk.");
-      console.log("Failed to get Bug Tracker sections from Zendesk.");
-    });
+// get information about ticket, ticket fields or users from Zendesk
+function getZendeskInformation(client, fieldName) {
+	return new Promise(function (resolve, reject) {
+		client.get(fieldName)
+			.then(function(data) {
+				var value = data[fieldName];
+				resolve(value);
+			})
+			.catch(function() {
+				reject("Failed to get requested information");
+			});
+	});
 };
+
+function requestUserInfo(client, id)
+{
+  let settings =
+  {
+    url: '/api/v2/users/' + id + '.json',
+    type:'GET',
+    dataType: 'json',
+  };
+
+  client.request(settings).then(
+    function(data)
+    {
+      showInfo(data);
+    },
+    function(response)
+    {
+      showError(response);
+    }
+  );
+}
+
+function requestTicketInfo(client, id)
+{
+  let settings =
+  {
+    url: '/api/v2/organizations/' + id + 'tickets.json',
+    type:'GET',
+    dataType: 'json',
+  };
+
+  client.request(settings).then(
+    function(data)
+    {
+      showInfo(data);
+    },
+    function(response)
+    {
+      showError(response);
+    }
+  );
+}
+
+
+function buildTable(txt='') {
+    var arr = JSON.parse(document.getElementById("JSONTextArea").value);
+    var keys = Object.keys(arr[0]);
+    txt += "<table border='1' ><tr>"
+    for (x in keys) {
+        if( keys[x] != 'url'){
+            txt += '<td class="bold">' + keys[x]+ '</td>'
+        }
+    }
+    txt += '</tr>'
+
+    for (x in arr) {
+        txt += '<tr>'
+        for (objects in arr[x]){
+            innerObject = arr[x]
+
+            if (innerObject.hasOwnProperty(objects)) {
+                var isTitle = false
+                var isURL = false
+
+                if (objects == 'Title'){
+                    isTitle = true
+                }
+                else if (objects == 'url'){
+                    isURL = true
+                }
+
+                if (isTitle == false){
+                    if(isURL == false){
+                        console.log(isURL)
+                        txt += '<td>' + innerObject[objects] + '</td>';
+                    }
+                }
+                else if(isTitle == true){
+                    txt += '<td><a href="' + arr[x].url + '">' + arr[x].Title + '</td>';
+                }
+            }
+        }
+
+    txt += '</tr>'
+
+    }
+    txt += "</table>"
+    document.getElementById("JSONTable").innerHTML = txt;
+}
+
+function JSONButtonPress(){
+    var JSONArray = JSON.parse(document.getElementById("JSONTextArea").value);
+    if(JSONArray == '')
+        return;
+
+    JSONToCSVConvertor(JSONArray, "Test Bug Sheet", true);
+}
 
 
 function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
@@ -67,15 +160,14 @@ function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
 
         //This loop will extract the label from 1st index of on array
         for (var index in arrData[0]) {
-
             //Now convert each value to string and comma-seprated
             row += index + ',';
         }
 
         row = row.slice(0, -1);
-
         //append Label row with line break
         CSV += row + '\r\n';
+
     }
 
     //1st loop is to extract each row
@@ -91,6 +183,7 @@ function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
 
         //add a line break after each row
         CSV += row + '\r\n';
+
     }
 
     if (CSV == '') {
@@ -114,7 +207,8 @@ function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
     //this trick will generate a temp <a /> tag
     var link = document.createElement("a");
     link.href = uri;
-
+    console.log(CSV)
+    console.log(link)
     //set the visibility hidden so it will not effect on your web-layout
     link.style = "visibility:hidden";
     link.download = fileName + ".csv";
@@ -123,4 +217,22 @@ function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function handleFileSelect(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+
+    var files = evt.dataTransfer.files; // FileList object.
+    var reader = new FileReader();
+    reader.onload = function(event) {
+         document.getElementById('JSONTextArea').value = event.target.result;
+    }
+    reader.readAsText(files[0],"UTF-8");
+}
+
+function handleDragOver(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
 }

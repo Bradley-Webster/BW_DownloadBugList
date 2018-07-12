@@ -6,6 +6,7 @@
     <script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.8/handlebars.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
+
     <script type="text/javascript" src="main.js"></script>
 
     <meta charset="utf-8">
@@ -14,48 +15,36 @@
     <link href="https://cdn.jsdelivr.net/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="main.css" rel="stylesheet">
 </head>
+
 <body>
-<h4>Download Bugs Test</h4>
-<button class='testBugButton'>Generate File</button>
-</div>
-<table class="data">
-    <tr class="headers color-grey">
-        <td class="element"><span class="innerlabel">BUG ID</span></td>
-        <td class="element "><span class="innerlabel">Status</span></td>
-        <td class="element "><span class="innerlabel">Target Release</span></td>
-        <td class="element "><span class="innerlabel">TITLE</span></td>
-    </tr>
-    <tr class="single-element">
-        <td><div class="element">199547</div></td>
-        <td><div class="element state"><span class="Closed">Closed</span></div></td>
-        <td><div class="element thin targ">Nuke 9.0v9</div></td>
-        <td><div class="element " title=" (2016-05-09T09:41:56Z)"><a href="https://thefoundry1452600598.zendesk.com/hc/en-us/articles/208485345-199547-Plugin-with-an-error-function-in-a-validate-function-crashes-Nuke">199547 - Plugin with an error() function in a validate function crashes Nuke</a></div></td>
-    </tr>
-    <tr class="single-element">
-        <td><div class="element">198311</div></td>
-        <td><div class="element state"><span class="InProgress">In Progress</span></div></td>
-        <td><div class="element thin targ">Nuke 10.0v3</div></td>
-        <td><div class="element blueColorTest" title="top5_nuke_3_ilm (2016-05-09T09:41:55Z)"><a href="https://thefoundry1452600598.zendesk.com/hc/en-us/articles/208485335-198311-Reading-in-EXR-sequences-with-certain-channel-names-can-corrupt-alter-the-order-of-channels-in-existing-scripts">198311 - Reading in EXR sequences with certain channel names can corrupt/alter the order of channels in existing scripts</a></div></td>
-    </tr>
-    <tr class="single-element">
-        <td><div class="element">197708</div></td>
-        <td><div class="element state"><span class="New">New</span></div></td>
-        <td><div class="element thin targ">None</div></td>
-        <td><div class="element " title=" (2016-04-04T22:59:01Z)"><a href="https://thefoundry1452600598.zendesk.com/hc/en-us/articles/208154875-197708-Deep-Reformat-output-does-not-match-Reformat-output-one-pixel-offset-in-certain-cases">197708 - Deep Reformat output does not match Reformat output, one pixel offset in certain cases</a></div></td>
-    </tr>
-</table>
-<div class='testBugSheet'>
-    <textarea rows="10" id="txt" class='txtarea'>[{"Bug_ID": "199547", "State": "Closed", "Targeted_Release": "Nuke 9.0v9", "Title": "199547 - Plugin with an error() function in a validate function crashes Nuke", "Href" : "https://thefoundry1452600598.zendesk.com/hc/en-us/articles/208485345-199547-Plugin-with-an-error-function-in-a-validate-function-crashes-Nuke"},
-  {"Bug_ID": "198311", "State": "In Progress", "Targeted_Release": "Nuke 10.0v3", "Title": "198311 - Reading in EXR sequences with certain channel names can corrupt/alter the order of channels in existing scripts", "Href" : "https://thefoundry1452600598.zendesk.com/hc/en-us/articles/208485335-198311-Reading-in-EXR-sequences-with-certain-channel-names-can-corrupt-alter-the-order-of-channels-in-existing-scripts"},
-  {"Bug_ID": "197708", "State": "New", "Targeted_Release": "None", "Title": "197708 - Deep Reformat output does not match Reformat output, one pixel offset in certain cases", "Href" : "https://thefoundry1452600598.zendesk.com/hc/en-us/articles/208154875-197708-Deep-Reformat-output-does-not-match-Reformat-output-one-pixel-offset-in-certain-cases"} ]
+<div class='padding'>
+<h4 class="padding">Download Bugs Test</h4>
+
+<!-- Created table example -->
+<div id="JSONTable" class="padding " ></div>
+
+<!-- Insert JSON file here:  -->
+<textarea rows="10" id="JSONTextArea" class='txtarea'>
 </textarea>
 
+<!-- initial Table build on HTML start  -->
+<script>
+buildTable()
+</script>
+</div>
+<div class='padding'>
+<button class='testBugButton' onclick="JSONButtonPress()">Generate File</button>
+<button class='testBugButton' onclick="buildTable()">Refresh Table</button>
 </div>
 <script id="error-template" type="text/x-handlebars-template">
     <p>{{status}} - {{statusText}} error. Please report a bug at the link below.</p>
 </script>
-
-
+<script>
+  // Setup the dnd listeners.
+  var dropZone = document.getElementById('JSONTextArea');
+  dropZone.addEventListener('dragover', handleDragOver, false);
+  dropZone.addEventListener('drop', handleFileSelect, false);
+</script>
 </body>
 <footer>
     <div id="footer">
