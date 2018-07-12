@@ -28,7 +28,7 @@ td, th {
 	font-size: 12px;
     border: 1px solid #dddddd;
     text-align: left;
-    padding: 8px;
+    padding: 3px;
 }
 
 tr:nth-child(even) {
@@ -40,6 +40,7 @@ tr:nth-child(even) {
     min-height:200px;
     display:block;
     width:100%;
+    padding-top: 10px
 }
 
 
