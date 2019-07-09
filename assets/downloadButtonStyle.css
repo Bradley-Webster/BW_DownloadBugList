@@ -1,0 +1,53 @@
+
+/* Bradley Webster download button addition code below*/
+
+#CSVButton {
+  background-image: url("https://s3-eu-west-1.amazonaws.com/support-zendesk/context-icons/icon_csv.png");
+  float: right;
+  width: 30px;
+  height: 30px;
+  padding-right: 35px;
+  padding-bottom: 35px;
+  background-repeat: no-repeat;
+  background-size: 30px, 30px;
+  background-position: top; 
+  cursor: pointer;
+}
+
+#PDFButton {
+  background-image: url("https://s3-eu-west-1.amazonaws.com/support-zendesk/context-icons/icon_pdf.png");
+  float: right;
+  width: 30px;
+  height: 30px;
+  padding-right: 40px;
+  padding-bottom: 35px;
+  background-repeat: no-repeat;
+  background-size: 30px, 30px;
+  background-position: top; 
+  cursor: pointer;
+
+}
+#XMLButton {
+  background-image: url("https://s3-eu-west-1.amazonaws.com/support-zendesk/context-icons/icon_xml.png");
+  float: right;
+  width: 30px;
+  height: 30px;
+  padding-right: 35px;
+  padding-bottom: 35px;
+  background-repeat: no-repeat;
+  background-size: 30px, 30px;
+  background-position: top; 
+  cursor: pointer;
+}
+#EXCELButton {
+  background-image: url("https://s3-eu-west-1.amazonaws.com/support-zendesk/context-icons/icon_excel.png");
+  float: right;
+  width: 30px;
+  height: 30px;
+  padding-right: 35px;
+  padding-bottom: 35px;
+  background-repeat: no-repeat;
+  background-size: 30px, 30px;
+  background-position: top; 
+  cursor: pointer;
+}
